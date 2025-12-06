@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rút Lì Xì Tết</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --tet-red-dark: #8b0000;
+      --tet-red: #b30000;
+      --tet-red-light: #d61b1b;
+      --tet-gold: #ffcc33;
+      --tet-gold-dark: #ff9900;
+      --text-color: #fffbe6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      background: radial-gradient(circle at top, #ff4444 0, #5a0000 55%, #2d0000 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("tet-background.svg") center/cover no-repeat;
+      opacity: 1;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background: transparent;
+      padding: 20px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .game-area {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .title-section {
+      text-align: center;
+      width: 100%;
+    }
+
+    .title-section h1 {
+      margin: 0;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--tet-gold);
+      text-shadow: 0 0 15px rgba(0, 0, 0, 0.8),
+        0 0 25px rgba(255, 204, 51, 0.8);
+    }
+
+    .title-section p {
+      margin: 8px 0 0;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .envelopes-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      width: 100%;
+      max-width: 800px;
+      justify-items: center;
+    }
+
+    .envelope-card {
+      width: 140px;
+      height: 100px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ff2d2d, #c00000);
+      border: 3px solid var(--tet-gold-dark);
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+      user-select: none;
+    }
+
+    .envelope-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        linear-gradient(135deg, transparent 50%, rgba(0, 0, 0, 0.35) 51%),
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 55%);
+      mix-blend-mode: screen;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .envelope-card:hover:not(.opened) {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 12px 25px rgba(255, 204, 51, 0.4);
+      filter: brightness(1.1);
+    }
+
+    .envelope-card:active:not(.opened) {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    .envelope-card.opened {
+      opacity: 0.5;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .envelope-inner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .envelope-icon {
+      font-size: 3rem;
+      margin-bottom: 8px;
+    }
+
+    .envelope-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--tet-gold);
+    }
+
+    .result-panel {
+      background: linear-gradient(145deg, rgba(179, 0, 0, 0.96), rgba(214, 27, 27, 0.98));
+      border-radius: 20px;
+      border: 2px solid var(--tet-gold);
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 204, 51, 0.28);
+      padding: 25px;
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      position: relative;
+    }
+
+    .result-panel h2 {
+      margin: 0 0 15px 0;
+      font-size: 1.4rem;
+      color: var(--tet-gold);
+      letter-spacing: 1px;
+    }
+
+    .result-amount {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--tet-gold);
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.8), 0 0 16px rgba(255, 204, 51, 0.8);
+      margin: 15px 0;
+    }
+
+    .result-message {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin: 10px 0 0;
+    }
+
+    .stats-section {
+      margin-top: 20px;
+      padding: 12px 15px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 204, 51, 0.3);
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+
+    .stats-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--tet-gold);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .btn-reset {
+      padding: 10px 25px;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid var(--tet-gold);
+      background: transparent;
+      color: var(--tet-gold);
+      cursor: pointer;
+      opacity: 0.9;
+      transition: background 0.15s ease, color 0.15s ease, transform 0.08s ease;
+    }
+
+    .btn-reset:hover {
+      background: rgba(255, 204, 51, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .btn-reset:active {
+      transform: translateY(0);
+      opacity: 0.8;
+    }
+
+    .container::before,
+    .container::after {
+      content: "";
+      position: absolute;
+      border: 2px solid rgba(255, 204, 51, 0.45);
+      border-radius: 18px;
+      inset: 6px;
+      pointer-events: none;
+    }
+
+    .container::after {
+      inset: 12px;
+      border-color: rgba(255, 204, 51, 0.2);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--tet-gold);
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.6),
+        0 0 12px rgba(255, 204, 51, 0.6);
+    }
+
+    header p {
+      margin: 6px 0 0;
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+
+    .lantern-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+      color: var(--tet-gold);
+      opacity: 0.9;
+    }
+
+    .lantern {
+      font-size: 1.1rem;
+    }
+
+    .lucky-area {
+      margin: 4px 0 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .envelope {
+      width: 160px;
+      height: 110px;
+      border-radius: 12px;
+      background: linear-gradient(
+        135deg,
+        #ff2d2d,
+        #c00000
+      );
+      position: relative;
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      overflow: hidden;
+      border: 2px solid var(--tet-gold-dark);
+    }
+
+    .envelope::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        linear-gradient(135deg, transparent 50%, rgba(0, 0, 0, 0.35) 51%),
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 55%);
+      mix-blend-mode: screen;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .envelope-label {
+      position: relative;
+      z-index: 1;
+      padding: 6px 10px;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, var(--tet-gold-dark), var(--tet-gold));
+      border-radius: 999px;
+      color: #5a0000;
+      font-weight: 700;
+      font-size: 0.9rem;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.55);
+    }
+
+    .btn-draw {
+      margin-top: 4px;
+      padding: 11px 26px;
+      border-radius: 999px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      border: none;
+      outline: none;
+      background: linear-gradient(135deg, var(--tet-gold), var(--tet-gold-dark));
+      color: #5a0000;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #b36b00, 0 10px 18px rgba(0, 0, 0, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: transform 0.09s ease, box-shadow 0.09s ease, filter 0.12s ease;
+    }
+
+    .btn-draw:hover {
+      filter: brightness(1.03);
+      transform: translateY(-1px);
+      box-shadow: 0 7px 0 #b36b00, 0 12px 22px rgba(0, 0, 0, 0.7);
+    }
+
+    .btn-draw:active {
+      transform: translateY(2px);
+      box-shadow: 0 3px 0 #b36b00, 0 6px 14px rgba(0, 0, 0, 0.55);
+    }
+
+    .btn-draw:disabled {
+      opacity: 0.6;
+      cursor: default;
+      transform: translateY(2px);
+      box-shadow: 0 3px 0 #b36b00, 0 6px 14px rgba(0, 0, 0, 0.55);
+    }
+
+    /* nút xóa kết quả */
+    .btn-reset {
+      margin-top: 6px;
+      padding: 7px 18px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid var(--tet-gold);
+      background: transparent;
+      color: var(--tet-gold);
+      cursor: pointer;
+      opacity: 0.9;
+      transition: background 0.15s ease, color 0.15s ease, transform 0.08s ease;
+    }
+
+    .btn-reset:hover {
+      background: rgba(255, 204, 51, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .btn-reset:active {
+      transform: translateY(1px);
+      opacity: 0.8;
+    }
+
+    .result {
+      margin-top: 10px;
+      text-align: center;
+      min-height: 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    .result-amount {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--tet-gold);
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.8),
+        0 0 16px rgba(255, 204, 51, 0.8);
+    }
+
+    .result-message {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    .shake {
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      20% {
+        transform: translateX(-6px);
+      }
+      40% {
+        transform: translateX(6px);
+      }
+      60% {
+        transform: translateX(-3px);
+      }
+      80% {
+        transform: translateX(3px);
+      }
+    }
+
+    @keyframes runningText {
+      from {
+        transform: translateX(120%);
+      }
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
+    .running-text {
+      position: fixed;
+      top: 20px;
+      left: 0;
+      width: 100%;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--tet-gold);
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      animation: none;
+      z-index: 999;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .sound-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--tet-gold), var(--tet-gold-dark));
+      border: 2px solid rgba(255, 204, 51, 0.5);
+      color: #5a0000;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, filter 0.2s ease;
+      z-index: 1000;
+    }
+
+    .sound-toggle:hover {
+      transform: scale(1.1);
+      filter: brightness(1.05);
+    }
+
+    .sound-toggle:active {
+      transform: scale(0.95);
+    }
+
+    .sound-toggle.muted {
+      opacity: 0.6;
+    }
+
+    /* Hộp quà chạy ngang qua lại */
+    @keyframes moveGiftForward {
+      0% {
+        transform: translateX(-100px);
+        opacity: 0;
+      }
+      5% {
+        opacity: 1;
+      }
+      95% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(calc(100vw + 100px));
+        opacity: 0;
+      }
+    }
+
+    @keyframes moveGiftBackward {
+      0% {
+        transform: translateX(calc(100vw + 100px));
+        opacity: 0;
+      }
+      5% {
+        opacity: 1;
+      }
+      95% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(-100px);
+        opacity: 0;
+      }
+    }
+
+    .moving-gifts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 500;
+      overflow: hidden;
+    }
+
+    .gift-box {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      animation: moveGiftForward linear infinite;
+    }
+
+    .gift-box:nth-child(1) {
+      top: 15%;
+      animation: moveGiftForward 8s linear infinite;
+      animation-delay: 0s;
+    }
+
+    .gift-box:nth-child(2) {
+      top: 30%;
+      animation: moveGiftBackward 10s linear infinite;
+      animation-delay: 2s;
+    }
+
+    .gift-box:nth-child(3) {
+      top: 45%;
+      animation: moveGiftForward 9s linear infinite;
+      animation-delay: 4s;
+    }
+
+    .gift-box:nth-child(4) {
+      top: 60%;
+      animation: moveGiftBackward 11s linear infinite;
+      animation-delay: 1s;
+    }
+
+    .gift-box:nth-child(5) {
+      top: 75%;
+      animation: moveGiftForward 8.5s linear infinite;
+      animation-delay: 3s;
+    }
+
+    .gift-box:nth-child(6) {
+      top: 20%;
+      animation: moveGiftBackward 10s linear infinite;
+      animation-delay: 5s;
+    }
+
+    .gift-box:nth-child(7) {
+      top: 50%;
+      animation: moveGiftForward 9.5s linear infinite;
+      animation-delay: 0.5s;
+    }
+
+    .gift-box:nth-child(8) {
+      top: 70%;
+      animation: moveGiftBackward 11s linear infinite;
+      animation-delay: 2.5s;
+    }
+
+    .stats {
+      margin-top: 14px;
+      padding: 8px 10px;
+      font-size: 0.82rem;
+      background: rgba(0, 0, 0, 0.22);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 204, 51, 0.4);
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 4px 10px;
+    }
+
+    .stats-row span {
+      opacity: 0.95;
+    }
+
+    .history {
+      margin-top: 12px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.18);
+      border: 1px dashed rgba(255, 204, 51, 0.4);
+      font-size: 0.82rem;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+
+    .history-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--tet-gold);
+    }
+
+    .history-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .history-list li {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+      border-bottom: 1px dotted rgba(255, 255, 255, 0.12);
+    }
+
+    .history-list li:last-child {
+      border-bottom: none;
+    }
+
+    .history-amount {
+      font-weight: 600;
+      color: var(--tet-gold);
+    }
+
+    .footer-note {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      opacity: 0.75;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      .running-text {
+        top: 10px;
+        font-size: 1rem;
+      }
+
+      .container {
+        max-width: 100%;
+        padding: 15px 12px 18px;
+      }
+
+      header h1 {
+        font-size: 1.5rem;
+        letter-spacing: 0.5px;
+      }
+
+      header p {
+        font-size: 0.85rem;
+      }
+
+      .lantern-row {
+        font-size: 0.75rem;
+        margin-bottom: 6px;
+      }
+
+      .lantern {
+        font-size: 0.9rem;
+      }
+
+      .envelope {
+        width: 140px;
+        height: 95px;
+      }
+
+      .envelope-label {
+        font-size: 0.8rem;
+        padding: 5px 8px;
+        margin-bottom: 8px;
+      }
+
+      .btn-draw {
+        padding: 10px 22px;
+        font-size: 0.95rem;
+      }
+
+      .btn-reset {
+        padding: 6px 16px;
+        font-size: 0.8rem;
+      }
+
+      .result-amount {
+        font-size: 1.4rem;
+      }
+
+      .result-message {
+        font-size: 0.85rem;
+      }
+
+      .stats {
+        margin-top: 10px;
+        padding: 6px 8px;
+        font-size: 0.75rem;
+      }
+
+      .history {
+        margin-top: 8px;
+        padding: 6px 8px;
+        font-size: 0.75rem;
+        max-height: 120px;
+      }
+
+      .footer-note {
+        font-size: 0.7rem;
+        margin-top: 6px;
+      }
+
+      .sound-toggle {
+        width: 45px;
+        height: 45px;
+        bottom: 15px;
+        right: 15px;
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 8px;
+      }
+
+      .running-text {
+        top: 8px;
+        font-size: 0.9rem;
+      }
+
+      .container {
+        padding: 12px 10px 15px;
+      }
+
+      header h1 {
+        font-size: 1.2rem;
+      }
+
+      header p {
+        font-size: 0.8rem;
+      }
+
+      .lantern-row {
+        font-size: 0.7rem;
+        margin-bottom: 4px;
+      }
+
+      .envelope {
+        width: 130px;
+        height: 85px;
+      }
+
+      .envelope-label {
+        font-size: 0.75rem;
+        padding: 4px 6px;
+        margin-bottom: 6px;
+      }
+
+      .btn-draw {
+        padding: 9px 20px;
+        font-size: 0.9rem;
+      }
+
+      .btn-reset {
+        padding: 5px 14px;
+        font-size: 0.75rem;
+      }
+
+      .result-amount {
+        font-size: 1.2rem;
+      }
+
+      .result-message {
+        font-size: 0.8rem;
+      }
+
+      .stats {
+        padding: 5px 6px;
+        font-size: 0.7rem;
+      }
+
+      .history {
+        padding: 5px 6px;
+        font-size: 0.7rem;
+        max-height: 100px;
+      }
+
+      .footer-note {
+        font-size: 0.65rem;
+      }
+
+      .sound-toggle {
+        width: 40px;
+        height: 40px;
+        bottom: 12px;
+        right: 12px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hộp quà chạy ngang -->
+  <div class="moving-gifts" id="movingGifts"></div>
+
+  <div class="running-text">🧧 Chúc Mừng Năm Mới 2026 🧧 Cả năm phát tài 💰 🧧 Chúc Mừng Năm Mới 2026 🧧 Cả năm phát tài 💰 🧧</div>
+
+  <button class="sound-toggle muted" id="soundToggle" title="Bật/Tắt nhạc">🔇</button>
+
+  <iframe
+    id="tetYouTube"
+    width="0"
+    height="0"
+    src=""
+    frameborder="0"
+    allow="autoplay"
+  ></iframe>
+
+  <div class="container">
+    <div class="game-area">
+      <div class="title-section">
+        <h1>🧧 Rút Lì Xì Tết 🧧</h1>
+        <p>Nhấp vào một trong 8 thiệp để rút lì xì may mắn</p>
+      </div>
+
+      <div class="envelopes-grid" id="envelopesGrid">
+        <!-- 8 thiệp sẽ được tạo bằng JavaScript -->
+      </div>
+
+      <div class="result-panel" id="resultPanel" style="display: none;">
+        <h2>Kết Quả Rút Lì Xì</h2>
+        <div class="result-amount" id="resultAmount">---</div>
+        <div class="result-message" id="resultMessage">Chúc bạn rút được thật nhiều lộc!</div>
+
+        <div class="stats-section">
+          <div class="stats-row">
+            <div class="stat-item">
+              <div class="stat-label">Tổng số lần rút:</div>
+              <div class="stat-value" id="totalDraws">0</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Tổng tiền nhận:</div>
+              <div class="stat-value" id="totalAmount">0đ</div>
+            </div>
+          </div>
+
+          <div class="stats-row">
+            <div style="width: 100%;">
+              <div class="stat-label">Lịch sử rút gần đây:</div>
+              <ul class="history-list" id="historyList" style="margin: 8px 0 0; text-align: left;"></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-reset" id="btnResetGame">Rút Lại</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script>
+    const rewards = [
+      { label: "88.888đ",  value: 88.888,   weight: 6},
+      { label: "68.686đ", value: 68.686,  weight: 7 },
+      { label: "63.636đ", value: 63.636,  weight: 14 },
+      { label: "50.000đ", value: 50000,  weight: 14 },
+      { label: "83.000đ", value: 83000,  weight: 6 },
+      { label: "86.000đ", value: 86000,  weight: 6 },
+      { label: "100.000đ", value: 100000, weight: 4 },
+      { label: "200.000đ", value: 200000, weight: 2 }
+    ];
+
+    const soundToggle   = document.getElementById("soundToggle");
+    const tetYouTube    = document.getElementById("tetYouTube");
+    const resultAmount  = document.getElementById("resultAmount");
+    const resultMessage = document.getElementById("resultMessage");
+    const totalDrawsEl  = document.getElementById("totalDraws");
+    const totalAmountEl = document.getElementById("totalAmount");
+    const historyList   = document.getElementById("historyList");
+    const resultPanel   = document.getElementById("resultPanel");
+    const envelopesGrid = document.getElementById("envelopesGrid");
+    const btnResetGame  = document.getElementById("btnResetGame");
+
+    const YT_URL = "https://www.youtube.com/embed/ZfzxnNsOIh0?autoplay=1&loop=1&playlist=ZfzxnNsOIh0";
+
+    let totalDraws = 0;
+    let totalAmount = 0;
+    let soundEnabled = false;
+    let confettiInterval = null;
+    let openedEnvelopes = new Set();
+    let isDrawing = false;
+
+    // Tạo 8 thiệp
+    function createEnvelopes() {
+      for (let i = 0; i < 8; i++) {
+        const envelope = document.createElement("div");
+        envelope.className = "envelope-card";
+        envelope.dataset.index = i;
+        envelope.innerHTML = `
+          <div class="envelope-inner">
+            <div class="envelope-icon">🧧</div>
+            <div class="envelope-text">Lì Xì</div>
+          </div>
+        `;
+        envelope.addEventListener("click", () => openEnvelope(i));
+        envelopesGrid.appendChild(envelope);
+      }
+    }
+
+    function openEnvelope(index) {
+      if (openedEnvelopes.has(index) || isDrawing) return;
+      
+      isDrawing = true;
+      const card = document.querySelector(`[data-index="${index}"]`);
+      
+      // Hiệu ứng lật
+      card.style.transform = "scale(0.8) rotateY(180deg)";
+      card.style.opacity = "0.7";
+      
+      setTimeout(() => {
+        const reward = weightedRandomReward();
+        openedEnvelopes.add(index);
+        card.classList.add("opened");
+        
+        // Cập nhật kết quả
+        totalDraws += 1;
+        totalAmount += reward.value;
+        
+        resultAmount.textContent = reward.label;
+        totalDrawsEl.textContent = totalDraws.toString();
+        totalAmountEl.textContent = formatCurrency(totalAmount);
+        
+        const bigPrize = reward.value >= 100000;
+        if (bigPrize) {
+          resultMessage.textContent = "Chúc mừng! Bạn trúng lì xì lớn, cả năm phát tài 💰";
+          triggerConfetti(2);
+        } else {
+          resultMessage.textContent = "Chúc mừng! Minh chúc cho bạn năm mới thật an lành 🎊";
+          triggerConfetti(1);
+        }
+        
+        addToHistory(reward);
+        resultPanel.style.display = "block";
+        
+        isDrawing = false;
+      }, 400);
+    }
+
+    function addToHistory(reward) {
+      const li = document.createElement("li");
+      const time = new Date();
+      const timeText = time.toLocaleTimeString("vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+
+      const spanAmount = document.createElement("span");
+      spanAmount.className = "history-amount";
+      spanAmount.textContent = reward.label;
+
+      const spanTime = document.createElement("span");
+      spanTime.textContent = timeText;
+
+      li.appendChild(spanAmount);
+      li.appendChild(spanTime);
+
+      historyList.insertBefore(li, historyList.firstChild);
+
+      while (historyList.children.length > 20) {
+        historyList.removeChild(historyList.lastChild);
+      }
+    }
+
+    function resetGame() {
+      totalDraws = 0;
+      totalAmount = 0;
+      openedEnvelopes.clear();
+      isDrawing = false;
+      
+      // Reset tất cả thiệp
+      document.querySelectorAll(".envelope-card").forEach(card => {
+        card.classList.remove("opened");
+        card.style.transform = "";
+        card.style.opacity = "1";
+      });
+      
+      resultPanel.style.display = "none";
+      resultAmount.textContent = "---";
+      resultMessage.textContent = "Chúc bạn rút được thật nhiều lộc!";
+      totalDrawsEl.textContent = "0";
+      totalAmountEl.textContent = "0đ";
+      historyList.innerHTML = "";
+    }
+
+    function formatCurrency(vnd) {
+      return vnd.toLocaleString("vi-VN") + "đ";
+    }
+
+    function weightedRandomReward() {
+      const totalWeight = rewards.reduce((sum, item) => sum + item.weight, 0);
+      let r = Math.random() * totalWeight;
+      for (const item of rewards) {
+        if (r < item.weight) return item;
+        r -= item.weight;
+      }
+      return rewards[0];
+    }
+
+    function triggerConfetti(intensity = 1) {
+      const duration = 3000 * intensity;
+
+      // Pháo hoa từ giữa (nhiều hơn)
+      confetti({
+        particleCount: Math.floor(120 * intensity),
+        spread: 120,
+        origin: { x: 0.5, y: 0.5 },
+        colors: ["#ff2d2d", "#ffcc33", "#ff9900", "#fffbe6", "#00ff00", "#ff00ff"],
+        ticks: Math.floor(duration / 16),
+        gravity: 0.8,
+        decay: 0.95
+      });
+
+      // Pháo hoa từ trên xuống
+      confetti({
+        particleCount: Math.floor(100 * intensity),
+        spread: 100,
+        origin: { x: 0.5, y: 0 },
+        colors: ["#ff2d2d", "#ffcc33", "#ff9900", "#fffbe6"],
+        ticks: Math.floor(duration / 16),
+        gravity: 1.2
+      });
+
+      // Pháo hoa từ trái
+      confetti({
+        particleCount: Math.floor(80 * intensity),
+        spread: 80,
+        origin: { x: 0, y: 0.5 },
+        colors: ["#ff2d2d", "#ffcc33", "#00ff00"],
+        ticks: Math.floor(duration / 16),
+        gravity: 0.9
+      });
+
+      // Pháo hoa từ phải
+      confetti({
+        particleCount: Math.floor(80 * intensity),
+        spread: 80,
+        origin: { x: 1, y: 0.5 },
+        colors: ["#ffcc33", "#ff9900", "#ff00ff"],
+        ticks: Math.floor(duration / 16),
+        gravity: 0.9
+      });
+
+      // Pháo hoa từ dưới lên (thêm mới)
+      confetti({
+        particleCount: Math.floor(100 * intensity),
+        spread: 140,
+        origin: { x: 0.5, y: 1 },
+        colors: ["#ff2d2d", "#ffcc33", "#ff9900", "#00ff00", "#ff00ff"],
+        ticks: Math.floor(duration / 16),
+        gravity: -0.5,
+        initialVelocity: { x: 0, y: -20 }
+      });
+
+      // Pháo hoa từ 4 góc
+      confetti({
+        particleCount: Math.floor(60 * intensity),
+        spread: 90,
+        origin: { x: 0.1, y: 0.1 },
+        colors: ["#ff2d2d", "#ffcc33"],
+        ticks: Math.floor(duration / 16),
+        gravity: 1
+      });
+
+      confetti({
+        particleCount: Math.floor(60 * intensity),
+        spread: 90,
+        origin: { x: 0.9, y: 0.1 },
+        colors: ["#ff9900", "#fffbe6"],
+        ticks: Math.floor(duration / 16),
+        gravity: 1
+      });
+
+      confetti({
+        particleCount: Math.floor(60 * intensity),
+        spread: 90,
+        origin: { x: 0.1, y: 0.9 },
+        colors: ["#00ff00", "#ff00ff"],
+        ticks: Math.floor(duration / 16),
+        gravity: -0.8
+      });
+
+      confetti({
+        particleCount: Math.floor(60 * intensity),
+        spread: 90,
+        origin: { x: 0.9, y: 0.9 },
+        colors: ["#ffcc33", "#ff2d2d"],
+        ticks: Math.floor(duration / 16),
+        gravity: -0.8
+      });
+    }
+
+    function startMusic() {
+      if (!soundEnabled) {
+        soundEnabled = true;
+        tetYouTube.src = YT_URL;
+        soundToggle.classList.remove("muted");
+        soundToggle.textContent = "🔊";
+      }
+    }
+
+    function stopMusic() {
+      soundEnabled = false;
+      tetYouTube.src = "";
+      soundToggle.classList.add("muted");
+      soundToggle.textContent = "🔇";
+    }
+
+    soundToggle.addEventListener("click", () => {
+      if (soundEnabled) stopMusic();
+      else startMusic();
+    });
+
+    btnResetGame.addEventListener("click", resetGame);
+
+    // Tạo hộp quà chạy ngang
+    function createMovingGifts() {
+      const giftsContainer = document.getElementById("movingGifts");
+      const giftEmojis = ["🎁", "🎀", "🎊", "🎉", "💝", "🧧"];
+      
+      // Tạo 8 hộp quà
+      for (let i = 0; i < 8; i++) {
+        const giftBox = document.createElement("div");
+        giftBox.className = "gift-box";
+        giftBox.textContent = giftEmojis[i % giftEmojis.length];
+        giftsContainer.appendChild(giftBox);
+      }
+    }
+
+    // Tự động bật nhạc khi trang load
+    window.addEventListener("load", () => {
+      createEnvelopes();
+      createMovingGifts();
+      
+      setTimeout(() => {
+        startMusic();
+      }, 500);
+      
+      setTimeout(() => {
+        triggerConfetti(1.5);
+      }, 800);
+
+      confettiInterval = setInterval(() => {
+        triggerConfetti(0.8);
+      }, 2500);
+    });
+
+    // Nếu load không hoạt động, click bất kỳ nơi đó sẽ bật nhạc
+    document.addEventListener(
+      "click",
+      function firstClick() {
+        if (!soundEnabled) {
+          startMusic();
+        }
+        document.removeEventListener("click", firstClick);
+      },
+      { once: true }
+    );
+  </script>
+</body>
+</html>

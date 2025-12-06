@@ -1,0 +1,168 @@
+<svg viewBox="0 0 1440 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Nền đỏ -->
+  <rect width="1440" height="800" fill="#8B0000"/>
+  
+  <!-- Sọc thẳng đứng -->
+  <defs>
+    <pattern id="stripes" x="0" y="0" width="20" height="800" patternUnits="userSpaceOnUse">
+      <line x1="10" y1="0" x2="10" y2="800" stroke="#6B0000" stroke-width="2"/>
+    </pattern>
+  </defs>
+  <rect width="1440" height="800" fill="url(#stripes)"/>
+  
+  <!-- Sóng vàng ở dưới -->
+  <g fill="#CC9933" opacity="0.8">
+    <path d="M0,750 Q30,730 60,750 T120,750 T180,750 T240,750 T300,750 T360,750 T420,750 T480,750 T540,750 T600,750 T660,750 T720,750 T780,750 T840,750 T900,750 T960,750 T1020,750 T1080,750 T1140,750 T1200,750 T1260,750 T1320,750 T1380,750 T1440,750 L1440,800 L0,800 Z"/>
+    <path d="M0,770 Q35,750 70,770 T140,770 T210,770 T280,770 T350,770 T420,770 T490,770 T560,770 T630,770 T700,770 T770,770 T840,770 T910,770 T980,770 T1050,770 T1120,770 T1190,770 T1260,770 T1330,770 T1400,770 T1440,770 L1440,800 L0,800 Z"/>
+  </g>
+  
+  <!-- Đèn lồng -->
+  <!-- Đèn lồng 1 -->
+  <g transform="translate(150, 150)">
+    <!-- Dây treo -->
+    <line x1="0" y1="-20" x2="0" y2="0" stroke="#CC8844" stroke-width="2"/>
+    <!-- Thân đèn -->
+    <ellipse cx="0" cy="0" rx="45" ry="55" fill="none" stroke="#DD3333" stroke-width="3"/>
+    <ellipse cx="0" cy="0" rx="40" ry="50" fill="none" stroke="#DD3333" stroke-width="2"/>
+    <!-- Đường dọc -->
+    <line x1="-35" y1="-50" x2="-35" y2="50" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="-17" y1="-50" x2="-17" y2="50" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="0" y1="-50" x2="0" y2="50" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="17" y1="-50" x2="17" y2="50" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="35" y1="-50" x2="35" y2="50" stroke="#DD3333" stroke-width="1.5"/>
+    <!-- Trang trí vàng -->
+    <circle cx="0" cy="-50" r="8" fill="#CC9933"/>
+    <circle cx="0" cy="50" r="10" fill="#CC9933"/>
+    <!-- Mái -->
+    <path d="M -30 -55 L -35 -65 L 35 -65 L 30 -55 Z" fill="#DD3333" stroke="#CC8844" stroke-width="1"/>
+    <!-- Dây cụm -->
+    <line x1="-10" y1="50" x2="-10" y2="70" stroke="#DD3333" stroke-width="1"/>
+    <line x1="0" y1="50" x2="0" y2="70" stroke="#DD3333" stroke-width="1"/>
+    <line x1="10" y1="50" x2="10" y2="70" stroke="#DD3333" stroke-width="1"/>
+  </g>
+  
+  <!-- Đèn lồng 2 -->
+  <g transform="translate(400, 200)">
+    <line x1="0" y1="-20" x2="0" y2="0" stroke="#CC8844" stroke-width="2"/>
+    <ellipse cx="0" cy="0" rx="50" ry="60" fill="none" stroke="#DD3333" stroke-width="3"/>
+    <ellipse cx="0" cy="0" rx="45" ry="55" fill="none" stroke="#DD3333" stroke-width="2"/>
+    <line x1="-40" y1="-55" x2="-40" y2="55" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="-20" y1="-55" x2="-20" y2="55" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="0" y1="-55" x2="0" y2="55" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="20" y1="-55" x2="20" y2="55" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="40" y1="-55" x2="40" y2="55" stroke="#DD3333" stroke-width="1.5"/>
+    <circle cx="0" cy="-60" r="10" fill="#CC9933"/>
+    <circle cx="0" cy="60" r="12" fill="#CC9933"/>
+    <path d="M -35 -65 L -40 -75 L 40 -75 L 35 -65 Z" fill="#DD3333" stroke="#CC8844" stroke-width="1"/>
+    <line x1="-12" y1="60" x2="-12" y2="75" stroke="#DD3333" stroke-width="1"/>
+    <line x1="0" y1="60" x2="0" y2="75" stroke="#DD3333" stroke-width="1"/>
+    <line x1="12" y1="60" x2="12" y2="75" stroke="#DD3333" stroke-width="1"/>
+  </g>
+  
+  <!-- Đèn lồng 3 -->
+  <g transform="translate(800, 150)">
+    <line x1="0" y1="-20" x2="0" y2="0" stroke="#CC8844" stroke-width="2"/>
+    <ellipse cx="0" cy="0" rx="45" ry="55" fill="none" stroke="#DD3333" stroke-width="3"/>
+    <ellipse cx="0" cy="0" rx="40" ry="50" fill="none" stroke="#DD3333" stroke-width="2"/>
+    <line x1="-35" y1="-50" x2="-35" y2="50" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="-17" y1="-50" x2="-17" y2="50" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="0" y1="-50" x2="0" y2="50" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="17" y1="-50" x2="17" y2="50" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="35" y1="-50" x2="35" y2="50" stroke="#DD3333" stroke-width="1.5"/>
+    <circle cx="0" cy="-50" r="8" fill="#CC9933"/>
+    <circle cx="0" cy="50" r="10" fill="#CC9933"/>
+    <path d="M -30 -55 L -35 -65 L 35 -65 L 30 -55 Z" fill="#DD3333" stroke="#CC8844" stroke-width="1"/>
+    <line x1="-10" y1="50" x2="-10" y2="70" stroke="#DD3333" stroke-width="1"/>
+    <line x1="0" y1="50" x2="0" y2="70" stroke="#DD3333" stroke-width="1"/>
+    <line x1="10" y1="50" x2="10" y2="70" stroke="#DD3333" stroke-width="1"/>
+  </g>
+  
+  <!-- Đèn lồng 4 -->
+  <g transform="translate(1100, 200)">
+    <line x1="0" y1="-20" x2="0" y2="0" stroke="#CC8844" stroke-width="2"/>
+    <ellipse cx="0" cy="0" rx="50" ry="60" fill="none" stroke="#DD3333" stroke-width="3"/>
+    <ellipse cx="0" cy="0" rx="45" ry="55" fill="none" stroke="#DD3333" stroke-width="2"/>
+    <line x1="-40" y1="-55" x2="-40" y2="55" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="-20" y1="-55" x2="-20" y2="55" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="0" y1="-55" x2="0" y2="55" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="20" y1="-55" x2="20" y2="55" stroke="#DD3333" stroke-width="1.5"/>
+    <line x1="40" y1="-55" x2="40" y2="55" stroke="#DD3333" stroke-width="1.5"/>
+    <circle cx="0" cy="-60" r="10" fill="#CC9933"/>
+    <circle cx="0" cy="60" r="12" fill="#CC9933"/>
+    <path d="M -35 -65 L -40 -75 L 40 -75 L 35 -65 Z" fill="#DD3333" stroke="#CC8844" stroke-width="1"/>
+    <line x1="-12" y1="60" x2="-12" y2="75" stroke="#DD3333" stroke-width="1"/>
+    <line x1="0" y1="60" x2="0" y2="75" stroke="#DD3333" stroke-width="1"/>
+    <line x1="12" y1="60" x2="12" y2="75" stroke="#DD3333" stroke-width="1"/>
+  </g>
+  
+  <!-- Hoa trang trí nhỏ -->
+  <!-- Hoa 1 -->
+  <g transform="translate(300, 80)">
+    <circle cx="0" cy="0" r="15" fill="none" stroke="#CC9933" stroke-width="2"/>
+    <circle cx="0" cy="0" r="10" fill="none" stroke="#DD3333" stroke-width="1"/>
+    <circle cx="0" cy="-12" r="5" fill="#CC9933"/>
+    <circle cx="10" cy="-6" r="5" fill="#CC9933"/>
+    <circle cx="10" cy="6" r="5" fill="#CC9933"/>
+    <circle cx="0" cy="12" r="5" fill="#CC9933"/>
+    <circle cx="-10" cy="6" r="5" fill="#CC9933"/>
+    <circle cx="-10" cy="-6" r="5" fill="#CC9933"/>
+  </g>
+  
+  <!-- Hoa 2 -->
+  <g transform="translate(650, 100)">
+    <circle cx="0" cy="0" r="12" fill="none" stroke="#CC9933" stroke-width="2"/>
+    <circle cx="0" cy="0" r="8" fill="none" stroke="#DD3333" stroke-width="1"/>
+    <circle cx="0" cy="-10" r="4" fill="#CC9933"/>
+    <circle cx="8" cy="-5" r="4" fill="#CC9933"/>
+    <circle cx="8" cy="5" r="4" fill="#CC9933"/>
+    <circle cx="0" cy="10" r="4" fill="#CC9933"/>
+    <circle cx="-8" cy="5" r="4" fill="#CC9933"/>
+    <circle cx="-8" cy="-5" r="4" fill="#CC9933"/>
+  </g>
+  
+  <!-- Hoa 3 -->
+  <g transform="translate(950, 80)">
+    <circle cx="0" cy="0" r="15" fill="none" stroke="#CC9933" stroke-width="2"/>
+    <circle cx="0" cy="0" r="10" fill="none" stroke="#DD3333" stroke-width="1"/>
+    <circle cx="0" cy="-12" r="5" fill="#CC9933"/>
+    <circle cx="10" cy="-6" r="5" fill="#CC9933"/>
+    <circle cx="10" cy="6" r="5" fill="#CC9933"/>
+    <circle cx="0" cy="12" r="5" fill="#CC9933"/>
+    <circle cx="-10" cy="6" r="5" fill="#CC9933"/>
+    <circle cx="-10" cy="-6" r="5" fill="#CC9933"/>
+  </g>
+  
+  <!-- Hoa nhỏ 4 -->
+  <g transform="translate(500, 350)">
+    <circle cx="0" cy="0" r="10" fill="none" stroke="#CC9933" stroke-width="1.5"/>
+    <circle cx="0" cy="-8" r="3.5" fill="#DD3333"/>
+    <circle cx="7" cy="-4" r="3.5" fill="#DD3333"/>
+    <circle cx="7" cy="4" r="3.5" fill="#DD3333"/>
+    <circle cx="0" cy="8" r="3.5" fill="#DD3333"/>
+    <circle cx="-7" cy="4" r="3.5" fill="#DD3333"/>
+    <circle cx="-7" cy="-4" r="3.5" fill="#DD3333"/>
+  </g>
+  
+  <!-- Hoa nhỏ 5 -->
+  <g transform="translate(1200, 350)">
+    <circle cx="0" cy="0" r="10" fill="none" stroke="#CC9933" stroke-width="1.5"/>
+    <circle cx="0" cy="-8" r="3.5" fill="#DD3333"/>
+    <circle cx="7" cy="-4" r="3.5" fill="#DD3333"/>
+    <circle cx="7" cy="4" r="3.5" fill="#DD3333"/>
+    <circle cx="0" cy="8" r="3.5" fill="#DD3333"/>
+    <circle cx="-7" cy="4" r="3.5" fill="#DD3333"/>
+    <circle cx="-7" cy="-4" r="3.5" fill="#DD3333"/>
+  </g>
+  
+  <!-- Hình thoi vàng 1 -->
+  <g transform="translate(280, 120)">
+    <polygon points="0,-15 15,0 0,15 -15,0" fill="none" stroke="#CC9933" stroke-width="2"/>
+    <polygon points="0,-10 10,0 0,10 -10,0" fill="#CC9933" opacity="0.6"/>
+  </g>
+  
+  <!-- Hình thoi vàng 2 -->
+  <g transform="translate(920, 140)">
+    <polygon points="0,-12 12,0 0,12 -12,0" fill="none" stroke="#CC9933" stroke-width="1.5"/>
+    <polygon points="0,-8 8,0 0,8 -8,0" fill="#CC9933" opacity="0.6"/>
+  </g>
+</svg>
