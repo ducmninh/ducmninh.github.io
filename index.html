@@ -82,7 +82,7 @@
 
     .envelopes-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       width: 100%;
       max-width: 800px;
@@ -859,6 +859,21 @@
   </style>
 </head>
 <body>
+  <!-- Modal bao lì xì hiển thị khi click vào một thiệp -->
+  <div id="lixiModal" style="display:none; position:fixed; inset:0; align-items:center; justify-content:center; z-index:2000;">
+    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.5);"></div>
+    <div style="position:relative; width:320px; max-width:90%; border-radius:14px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.6); background:linear-gradient(180deg,#d93a3a,#9b1414); color:var(--text-color); z-index:2010;">
+      <div style="padding:18px; text-align:center;">
+        <div style="font-size:1.05rem; opacity:0.95; margin-bottom:6px;">Hoàn Trả</div>
+        <div id="modalAmount" style="background:rgba(0,0,0,0.18); border-radius:24px; padding:10px 18px; display:inline-block; font-weight:700; color:#ffd966; margin-bottom:14px;">0.00</div>
+
+        <div id="modalOpenBtn" role="button" tabindex="0" style="display:inline-block; margin-top:10px; width:100px; height:100px; line-height:100px; border-radius:50%; background:linear-gradient(180deg,#ffd89b,#ffcf6b); color:#8b2b00; font-weight:800; font-size:1.1rem; cursor:pointer; box-shadow:0 8px 0 rgba(0,0,0,0.25);">MỞ</div>
+
+        <div id="modalHint" style="margin-top:12px; font-size:0.9rem; opacity:0.95;">Nhấp để mở bao lì xì</div>
+        <div style="font-size:0.78rem; opacity:0.9; margin-top:8px;">28/11/2025 &nbsp; Nguồn: Phần Thư...</div>
+      </div>
+    </div>
+  </div>
   <!-- Hộp quà chạy ngang -->
   <div class="moving-gifts" id="movingGifts"></div>
 
@@ -874,16 +889,19 @@
     frameborder="0"
     allow="autoplay"
   ></iframe>
+  <!-- Local audio (thêm file nhac.mp3 vào thư mục gốc của trang) -->
+  <audio id="tetAudio" src="nhac.mp3" preload="auto" loop></audio>
 
   <div class="container">
     <div class="game-area">
       <div class="title-section">
         <h1>🧧 Rút Lì Xì Tết 🧧</h1>
-        <p>Nhấp vào một trong 8 thiệp để rút lì xì may mắn</p>
+          <p>Nhấp vào một trong 6 thiệp để rút lì xì may mắn</p>
       </div>
 
+
       <div class="envelopes-grid" id="envelopesGrid">
-        <!-- 8 thiệp sẽ được tạo bằng JavaScript -->
+        <!-- 6 thiệp sẽ được tạo bằng JavaScript -->
       </div>
 
       <div class="result-panel" id="resultPanel" style="display: none;">
@@ -933,6 +951,7 @@
 
     const soundToggle   = document.getElementById("soundToggle");
     const tetYouTube    = document.getElementById("tetYouTube");
+    const tetAudio      = document.getElementById("tetAudio");
     const resultAmount  = document.getElementById("resultAmount");
     const resultMessage = document.getElementById("resultMessage");
     const totalDrawsEl  = document.getElementById("totalDraws");
@@ -951,9 +970,17 @@
     let openedEnvelopes = new Set();
     let isDrawing = false;
 
-    // Tạo 8 thiệp
+    // Return a fixed number of envelopes (6)
+    function getEnvelopeCount() {
+      return 6;
+    }
+
     function createEnvelopes() {
-      for (let i = 0; i < 8; i++) {
+      const count = getEnvelopeCount();
+      // Clear any existing envelopes first
+      envelopesGrid.innerHTML = "";
+
+      for (let i = 0; i < count; i++) {
         const envelope = document.createElement("div");
         envelope.className = "envelope-card";
         envelope.dataset.index = i;
@@ -1164,7 +1191,18 @@
     function startMusic() {
       if (!soundEnabled) {
         soundEnabled = true;
-        tetYouTube.src = YT_URL;
+        // Try to play local audio first (nhac.mp3). If play is blocked or not available, fall back to YouTube iframe.
+        if (tetAudio && tetAudio.src) {
+          const playPromise = tetAudio.play();
+          if (playPromise && typeof playPromise.then === 'function') {
+            playPromise.catch(() => {
+              // Autoplay blocked or error - fallback to YouTube
+              tetYouTube.src = YT_URL;
+            });
+          }
+        } else {
+          tetYouTube.src = YT_URL;
+        }
         soundToggle.classList.remove("muted");
         soundToggle.textContent = "🔊";
       }
@@ -1172,6 +1210,16 @@
 
     function stopMusic() {
       soundEnabled = false;
+      // Pause local audio if playing
+      try {
+        if (tetAudio && !tetAudio.paused) {
+          tetAudio.pause();
+          tetAudio.currentTime = 0;
+        }
+      } catch (e) {
+        // ignore
+      }
+      // Stop YouTube iframe
       tetYouTube.src = "";
       soundToggle.classList.add("muted");
       soundToggle.textContent = "🔇";
@@ -1198,8 +1246,12 @@
       }
     }
 
+    // Track current envelope count and auto-start behaviors
+    let lastEnvelopeCount = getEnvelopeCount();
+
     // Tự động bật nhạc khi trang load
     window.addEventListener("load", () => {
+      lastEnvelopeCount = getEnvelopeCount();
       createEnvelopes();
       createMovingGifts();
       
@@ -1214,6 +1266,15 @@
       confettiInterval = setInterval(() => {
         triggerConfetti(0.8);
       }, 2500);
+    });
+
+    // Recreate envelopes when crossing responsive breakpoint
+    window.addEventListener("resize", () => {
+      const newCount = getEnvelopeCount();
+      if (newCount !== lastEnvelopeCount) {
+        lastEnvelopeCount = newCount;
+        createEnvelopes();
+      }
     });
 
     // Nếu load không hoạt động, click bất kỳ nơi đó sẽ bật nhạc
