@@ -57,6 +57,9 @@
       flex-direction: column;
       gap: 20px;
       align-items: center;
+      /* Center content vertically so envelopes appear in middle of screen */
+      justify-content: center;
+      min-height: calc(100vh - 160px);
     }
 
     .title-section {
@@ -83,15 +86,19 @@
     .envelopes-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      gap: 18px;
       width: 100%;
-      max-width: 800px;
+      max-width: 720px;
+      margin: 0 auto;
       justify-items: center;
+      justify-content: center;
+      align-content: center;
+      place-items: center;
     }
 
     .envelope-card {
-      width: 140px;
-      height: 100px;
+      width: 120px;
+      height: 86px;
       border-radius: 12px;
       background: linear-gradient(135deg, #ff2d2d, #c00000);
       border: 3px solid var(--tet-gold-dark);
@@ -780,6 +787,15 @@
     @media (max-width: 480px) {
       body {
         padding: 8px;
+        align-items: flex-start;
+        padding-top: 28px;
+      }
+
+      /* Ensure game area doesn't force large min-height on small screens */
+      .game-area {
+        justify-content: flex-start;
+        min-height: auto;
+        padding-top: 6px;
       }
 
       .running-text {
@@ -789,6 +805,8 @@
 
       .container {
         padding: 12px 10px 15px;
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
       }
 
       header h1 {
@@ -813,6 +831,62 @@
         font-size: 0.75rem;
         padding: 4px 6px;
         margin-bottom: 6px;
+      }
+
+      /* Mobile-specific envelope grid & cards */
+      .envelopes-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        max-width: 100%;
+      }
+
+      /* Ensure the grid stays centered and visible when keyboard or small viewports appear */
+      .envelopes-grid {
+        margin-top: 6px;
+        margin-bottom: 6px;
+      }
+
+      .envelope-card {
+        width: 96px;
+        height: 74px;
+        border-radius: 10px;
+      }
+
+      .envelope-icon {
+        font-size: 1.9rem;
+      }
+
+      .envelope-text {
+        font-size: 0.75rem;
+      }
+
+      .title-section h1 {
+        font-size: 1.1rem;
+      }
+
+      .title-section p {
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+      }
+
+      .result-panel {
+        padding: 14px;
+      }
+
+      .running-text {
+        display: none;
+      }
+
+      .moving-gifts {
+        display: none;
+      }
+
+      .sound-toggle {
+        width: 40px;
+        height: 40px;
+        bottom: 10px;
+        right: 10px;
+        font-size: 0.95rem;
       }
 
       .btn-draw {
